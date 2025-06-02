@@ -23,7 +23,7 @@ todoRouter.post("/", async (req, res) => {
 });
 
 todoRouter.delete("/:id", async (req, res) => {
-  const _id = req.params._id;
+  const _id = req.params.id;
   try {
     const todo = await Todo.deleteOne({ _id });
     res.status(200).json({ status: "success", todo });
