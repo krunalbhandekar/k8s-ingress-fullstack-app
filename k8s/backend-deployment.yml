@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: backend-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: backend
@@ -14,16 +14,30 @@ spec:
     spec:
       containers:
         - name: backend
-          image: your-dockerhub/backend
+          image: <your-docker-username>/backend:latest
           ports:
             - containerPort: 3000
           env:
-            - name: MONGO_URL
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DB_HOST
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DB_NAME
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: backend-secret
-                  key: MONGO_URL
-
+                  name: app-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: DB_PASSWORD
 ---
 apiVersion: v1
 kind: Service
@@ -34,5 +48,6 @@ spec:
     app: backend
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 4000
+      targetPort: 4000
+  type: ClusterIP

@@ -1,35 +1,34 @@
 const express = require("express");
-const Todo = require("../models/todo");
+const db = require("../db");
 
 const todoRouter = express.Router();
 
 todoRouter.get("/", async (req, res) => {
-  try {
-    const todos = await Todo.find();
-    res.status(200).json({ status: "success", todos });
-  } catch (err) {
-    res.status(500).json({ status: "error", error: err.message });
-  }
+  db.query("SELECT * FROM todos", (err, result) => {
+    if (err) {
+      return res.status(500).json({ status: "error", error: err.message });
+    }
+    res.status(200).json({ status: "success", todos: result });
+  });
 });
 
 todoRouter.post("/", async (req, res) => {
   const { title } = req.body;
-  try {
-    const todo = await Todo.create({ title });
-    res.status(200).json({ status: "success", todo });
-  } catch (err) {
-    res.status(500).json({ status: "error", error: err.message });
-  }
+  db.query("INSERT INTO todos (title) VALUES (?)", [title], (err) => {
+    if (err) {
+      return res.status(500).json({ status: "error", error: err.message });
+    }
+    res.status(200).json({ status: "success" });
+  });
 });
 
 todoRouter.delete("/:id", async (req, res) => {
-  const _id = req.params.id;
-  try {
-    const todo = await Todo.deleteOne({ _id });
-    res.status(200).json({ status: "success", todo });
-  } catch (err) {
-    res.status(500).json({ status: "error", error: err.message });
-  }
+  db.query("DELETE FROM todos WHERE ID = ?", [req.params.id], (err) => {
+    if (err) {
+      return res.status(500).json({ status: "error", error: err.message });
+    }
+    res.status(200).json({ status: "success" });
+  });
 });
 
 module.exports = todoRouter;
