@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "This is a backend project of k8s ingress fullstack app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node index.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krunalbhandekar/k8s-ingress-fullstack-app.git"
+  },
+  "author": "Krunal Bhandekar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krunalbhandekar/k8s-ingress-fullstack-app/issues"
+  },
+  "homepage": "https://github.com/krunalbhandekar/k8s-ingress-fullstack-app#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.1"
+  }
+}
