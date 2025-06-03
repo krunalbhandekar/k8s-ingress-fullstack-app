@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
   const dbPool = await db(); // this gives you the promisePool
 
   // Pass the dbPool to router
-  app.use("/api/todo", todoRouter(dbPool));
+  app.use("/todo", todoRouter(dbPool));
 
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);

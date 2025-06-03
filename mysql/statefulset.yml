@@ -3,11 +3,11 @@ kind: StatefulSet
 metadata:
   name: mysql
 spec:
+  serviceName: "mysql"
+  replicas: 1
   selector:
     matchLabels:
       app: mysql
-  serviceName: "mysql"
-  replicas: 1
   template:
     metadata:
       labels:
@@ -24,19 +24,3 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: mysql-root-password
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: mysql-password
-          volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
-  volumeClaimTemplates:
-    - metadata:
-        name: mysql-persistent-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 5Gi

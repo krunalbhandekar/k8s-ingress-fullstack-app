@@ -7,7 +7,7 @@
     <ul id="list"></ul>
 
     <script>
-      const url = "http://localhost:3000/api/todo";
+      const url = "/api/todo";
       async function fetchTodos() {
         const res = await fetch(url);
         const { status, todos } = await res.json();

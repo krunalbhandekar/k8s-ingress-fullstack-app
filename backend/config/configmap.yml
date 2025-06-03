@@ -5,3 +5,5 @@ metadata:
 data:
   DB_HOST: mysql
   DB_NAME: mydb
+  DB_USER: mysql
+  DB_PASS: mysqlroot
