@@ -19,22 +19,14 @@ spec:
             - containerPort: 3000
           env:
             - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: DB_HOST
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: DB_NAME
+              value: "mysql"
             - name: DB_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: DB_USER
+              value: "admin"
             - name: DB_PASS
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: DB_PASS
+              value: "admin"
+            - name: DB_NAME
+              value: "mydb"
+            - name: DB_PORT
+              value: "3306"
+            - name: PORT
+              value: "3000"

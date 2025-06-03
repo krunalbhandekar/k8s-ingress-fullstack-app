@@ -8,7 +8,7 @@ const DB_PORT = process.env.DB_PORT || 3306;
 
 const db = async () => {
   try {
-    // Step 1: Use regular mysql2 connection
+    // Create the database if it doesn't exist
     const connection = mysql.createConnection({
       host: DB_HOST,
       user: DB_USER,
@@ -17,14 +17,13 @@ const db = async () => {
       multipleStatements: true,
     });
 
-    // Step 2: Use `.promise()` to allow await
     await connection
       .promise()
       .query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
-    console.log(`Database ${DB_NAME} is ready`);
+    console.log(`Database '${DB_NAME}' is ready`);
     connection.end();
 
-    // Step 3: Create pool and wrap it with `.promise()`
+    // Create a pool for reuse
     const pool = mysql.createPool({
       host: DB_HOST,
       user: DB_USER,
@@ -38,7 +37,7 @@ const db = async () => {
 
     const promisePool = pool.promise();
 
-    // Step 4: Ensure the todos table exists
+    // Create todos table if it doesn't exist
     await promisePool.query(`
       CREATE TABLE IF NOT EXISTS todos (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -46,11 +45,11 @@ const db = async () => {
       )
     `);
 
-    console.log("Todos table ready");
+    console.log("Todos table is ready");
 
     return promisePool;
   } catch (error) {
-    console.error("DB initialization failed:", error);
+    console.error("DB initialization failed:", error.message);
     process.exit(1);
   }
 };

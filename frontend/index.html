@@ -7,7 +7,7 @@
     <ul id="list"></ul>
 
     <script>
-      const url = "/api/todo";
+      const url = "/api";
       async function fetchTodos() {
         const res = await fetch(url);
         const { status, todos } = await res.json();
