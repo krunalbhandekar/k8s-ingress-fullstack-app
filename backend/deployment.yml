@@ -20,21 +20,21 @@ spec:
           env:
             - name: DB_HOST
               valueFrom:
-                configMapKey Ref:
+                configMapKeyRef:
                   name: backend-config
                   key: DB_HOST
             - name: DB_NAME
               valueFrom:
-                configMapKey Ref:
+                configMapKeyRef:
                   name: backend-config
                   key: DB_NAME
             - name: DB_USER
               valueFrom:
-                configMapKey Ref:
+                configMapKeyRef:
                   name: backend-config
                   key: DB_USER
             - name: DB_PASS
               valueFrom:
-                configMapKey Ref:
+                configMapKeyRef:
                   name: backend-config
                   key: DB_PASS
