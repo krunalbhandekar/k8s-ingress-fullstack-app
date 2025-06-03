@@ -17,14 +17,3 @@ spec:
           image: krunalbhandekar10/frontend
           ports:
             - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend
-spec:
-  selector:
-    app: frontend
-  ports:
-    - port: 80
-      targetPort: 80

@@ -1,27 +1,58 @@
 const mysql = require("mysql2");
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+const DB_HOST = process.env.DB_HOST || "mysql";
+const DB_USER = process.env.DB_USER || "admin";
+const DB_PASS = process.env.DB_PASS || "admin";
+const DB_NAME = process.env.DB_NAME || "mydb";
+const DB_PORT = process.env.DB_PORT || 3306;
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log("MySql Connected");
-});
+const db = async () => {
+  try {
+    // Step 1: Use regular mysql2 connection
+    const connection = mysql.createConnection({
+      host: DB_HOST,
+      user: DB_USER,
+      password: DB_PASS,
+      port: DB_PORT,
+      multipleStatements: true,
+    });
 
-// Ensure the 'todos' table exists
-db.query(
-  `CREATE TABLE IF NOT EXISTS todos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL
-  )`,
-  (err) => {
-    if (err) throw err;
-    console.log("Todos table ensured");
+    // Step 2: Use `.promise()` to allow await
+    await connection
+      .promise()
+      .query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
+    console.log(`Database ${DB_NAME} is ready`);
+    connection.end();
+
+    // Step 3: Create pool and wrap it with `.promise()`
+    const pool = mysql.createPool({
+      host: DB_HOST,
+      user: DB_USER,
+      password: DB_PASS,
+      database: DB_NAME,
+      port: DB_PORT,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+    });
+
+    const promisePool = pool.promise();
+
+    // Step 4: Ensure the todos table exists
+    await promisePool.query(`
+      CREATE TABLE IF NOT EXISTS todos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL
+      )
+    `);
+
+    console.log("Todos table ready");
+
+    return promisePool;
+  } catch (error) {
+    console.error("DB initialization failed:", error);
+    process.exit(1);
   }
-);
+};
 
 module.exports = db;
