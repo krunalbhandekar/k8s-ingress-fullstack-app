@@ -26,21 +26,23 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:8.0
+          image: mysql:8
           ports:
             - containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: app-secret
-                  key: DB_PASSWORD
+                  name: mysql-secret
+                  key: root-password
+            - name: MYSQL_DATABASE
+              value: todo
           volumeMounts:
-            - name: mysql-persistent-storage
+            - name: mysql-pvc
               mountPath: /var/lib/mysql
   volumeClaimTemplates:
     - metadata:
-        name: mysql-persistent-storage
+        name: mysql-pvc
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

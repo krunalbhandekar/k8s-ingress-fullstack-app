@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>To-Do List</h1>
+    <input id="task" type="text" placeholder="Enter a task" />
+    <button onclick="addTask()">Add</button>
+    <ul id="list"></ul>
+
+    <script>
+      async function fetchTodos() {
+        const res = await fetch("/api/todos");
+        const todos = await res.json();
+        const list = document.getElementById("list");
+        list.innerHTML = "";
+        todos.forEach((todo) => {
+          const li = document.createElement("li");
+          li.innerText = todo.task;
+          list.appendChild(li);
+        });
+      }
+
+      async function addTask() {
+        const task = document.getElementById("task").value;
+        await fetch("/api/todos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ task }),
+        });
+        fetchTodos();
+      }
+
+      fetchTodos();
+    </script>
+  </body>
+</html>

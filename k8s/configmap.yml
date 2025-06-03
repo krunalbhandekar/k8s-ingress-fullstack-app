@@ -2,6 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
+  namespace: default
+  labels:
+    app: todo
 data:
   DB_HOST: mysql
-  DB_NAME: todos_db
+  DB_NAME: todo

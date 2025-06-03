@@ -1,7 +1,7 @@
 const todoRouter = require("./routes/todo");
 
 const routerInit = (app) => {
-  app.get("/", async (_, res) => {
+  app.get("/api/", async (_, res) => {
     res.status(200).send({
       status: "success",
       name: "K8S-Ingress-Fullstack-App",
@@ -15,7 +15,7 @@ const routerInit = (app) => {
       },
     });
   });
-  app.use("/todo", todoRouter);
+  app.use("/api/todo", todoRouter);
 };
 
 module.exports = routerInit;
