@@ -97,10 +97,10 @@ docker build -t <your-dockerhub-username>/frontend ./frontend/
 docker images
 ```
 
-| REPOSITORY                         | TAG    | IMAGE ID     | CREATED           | SIZE   |
-| ---------------------------------- | ------ | ------------ | ----------------- | ------ |
-| <your-dockerhub-username>/backend  | latest | ****\*\***** | About an hour ago | 133MB  |
-| <your-dockerhub-username>/frontend | latest | ****\*\***** | About an hour ago | 48.2MB |
+| REPOSITORY                         | TAG    | IMAGE ID         | CREATED            | SIZE   |
+| ---------------------------------- | ------ | ---------------- | ------------------ | ------ |
+| <your-dockerhub-username>/backend  | latest | \***\*\*\*\*\*** | About a minute ago | 133MB  |
+| <your-dockerhub-username>/frontend | latest | \***\*\*\*\*\*** | 10 seconds ago     | 48.2MB |
 
 ### 4. Push Docker Images to DockerHub
 
@@ -128,7 +128,7 @@ Wait until the controller pods are running:
 kubectl get pods -n ingress-nginx
 ```
 
-### 6. Update Image Names in Kubernetes Manifests
+### 6. Update Image Names in both Kubernetes Manifests (`deployment.yml`)
 
 ```bash
 image: <your-dockerhub-username>/backend
