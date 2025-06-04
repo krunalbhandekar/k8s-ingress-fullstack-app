@@ -16,7 +16,6 @@ A scalable full-stack To-Do List application built with:
 ```bash
 - k8s-ingress-fullstack-app
   - backend
-    - .env
     - db.js
     - Dockerfile
     - index.js
@@ -214,14 +213,14 @@ You'll see an address like:
 
 - **Frontend:**
 
-http://<elb-address>
+http://<ELB-Address>
 
 Example:
 http://a29f77032a45848e7afa19969c6057e8-23cb952f5dcd1f7e.elb.ap-south-1.amazonaws.com
 
 - **Backend API:**
 
-http://<elb-address>/api
+http://<ELB-Address>/api
 
 Example:
 http://a29f77032a45848e7afa19969c6057e8-23cb952f5dcd1f7e.elb.ap-south-1.amazonaws.com/api
