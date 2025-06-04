@@ -213,14 +213,14 @@ You'll see an address like:
 
 - **Frontend:**
 
-http://<ELB-Address>
+http://<ELB-ADDRESS>
 
 Example:
 http://a29f77032a45848e7afa19969c6057e8-23cb952f5dcd1f7e.elb.ap-south-1.amazonaws.com
 
 - **Backend API:**
 
-http://<ELB-Address>/api
+http://<ELB-ADDRESS>/api
 
 Example:
 http://a29f77032a45848e7afa19969c6057e8-23cb952f5dcd1f7e.elb.ap-south-1.amazonaws.com/api
