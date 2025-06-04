@@ -27,15 +27,3 @@ spec:
               value: admin
             - name: MYSQL_PASSWORD
               value: admin
-          volumeMounts:
-            - name: mysql-storage
-              mountPath: /var/lib/mysql
-  volumeClaimTemplates:
-    - metadata:
-        name: mysql-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: mysql-storage
-        resources:
-          requests:
-            storage: 1Gi

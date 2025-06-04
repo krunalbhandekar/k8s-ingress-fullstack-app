@@ -1,12 +1,12 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: frontend-hpa
+  name: backend-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: frontend
+    name: backend
   minReplicas: 2
   maxReplicas: 5
   metrics:
@@ -15,4 +15,4 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 50 # Scale if CPU > 50%
+          averageUtilization: 50

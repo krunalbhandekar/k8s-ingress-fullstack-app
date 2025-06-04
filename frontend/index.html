@@ -1,33 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      .input-group {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      #task {
+        width: 70%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin-left: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        background: white;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .actions button {
+        margin-left: 5px;
+        background-color: #007bff;
+      }
+
+      .actions button.delete {
+        background-color: #dc3545;
+      }
+
+      .actions button:hover {
+        opacity: 0.9;
+      }
+
+      input.edit-input {
+        width: 60%;
+        padding: 5px;
+      }
+    </style>
+  </head>
   <body>
     <h1>To-Do List</h1>
-    <input id="task" type="text" placeholder="Enter a task" />
-    <button onclick="addTask()">Add</button>
+    <div class="input-group">
+      <input id="task" type="text" placeholder="Enter a task" />
+      <button onclick="addTask()">Add</button>
+    </div>
     <ul id="list"></ul>
 
     <script>
       const url = "/api";
+
       async function fetchTodos() {
         const res = await fetch(url);
-        const { status, todos } = await res.json();
+        const { todos } = await res.json();
         const list = document.getElementById("list");
         list.innerHTML = "";
         todos.forEach((todo) => {
           const li = document.createElement("li");
-          li.innerText = todo.title;
+
+          const titleSpan = document.createElement("span");
+          titleSpan.innerText = `${todo.id}. ${todo.title}`;
+
+          const actionsDiv = document.createElement("div");
+          actionsDiv.classList.add("actions");
+
+          const editBtn = document.createElement("button");
+          editBtn.innerText = "Edit";
+          editBtn.onclick = () => editTask(todo.id, titleSpan, li);
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.innerText = "Delete";
+          deleteBtn.classList.add("delete");
+          deleteBtn.onclick = () => deleteTask(todo.id);
+
+          actionsDiv.appendChild(editBtn);
+          actionsDiv.appendChild(deleteBtn);
+
+          li.appendChild(titleSpan);
+          li.appendChild(actionsDiv);
           list.appendChild(li);
         });
       }
 
       async function addTask() {
-        const task = document.getElementById("task").value;
+        const taskInput = document.getElementById("task");
+        const task = taskInput.value.trim();
+        if (!task) return alert("Task cannot be empty");
         await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: task }),
         });
+        taskInput.value = "";
         fetchTodos();
+      }
+
+      async function deleteTask(id) {
+        await fetch(`${url}/${id}`, { method: "DELETE" });
+        fetchTodos();
+      }
+
+      function editTask(id, titleSpan, li) {
+        const input = document.createElement("input");
+        input.value = titleSpan.innerText;
+        input.className = "edit-input";
+
+        const saveBtn = document.createElement("button");
+        saveBtn.innerText = "Save";
+        saveBtn.onclick = async () => {
+          const newTitle = input.value.trim();
+          if (!newTitle) return alert("Title cannot be empty");
+          await fetch(`${url}/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: newTitle }),
+          });
+          fetchTodos();
+        };
+
+        const cancelBtn = document.createElement("button");
+        cancelBtn.innerText = "Cancel";
+        cancelBtn.onclick = () => fetchTodos();
+
+        const actionsDiv = li.querySelector(".actions");
+        actionsDiv.innerHTML = "";
+        actionsDiv.appendChild(saveBtn);
+        actionsDiv.appendChild(cancelBtn);
+
+        li.insertBefore(input, actionsDiv);
+        li.removeChild(titleSpan);
       }
 
       fetchTodos();

@@ -30,6 +30,19 @@ app.use(cors());
     }
   });
 
+  app.put("/:id", async (req, res) => {
+    try {
+      const { title } = req.body;
+      await dbPool.query("UPDATE todos SET title = ? WHERE id = ?", [
+        title,
+        req.params.id,
+      ]);
+      res.status(200).json({ status: "success" });
+    } catch (err) {
+      res.status(500).json({ status: "error", error: err.message });
+    }
+  });
+
   app.delete("/:id", async (req, res) => {
     try {
       await dbPool.query("DELETE FROM todos WHERE id = ?", [req.params.id]);
